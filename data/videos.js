@@ -1,3 +1,5 @@
+var DomParser = require('dom-parser');
+
 const str = `<ul>
   <li data-time="5:17">Flexbox Video</li>
   <li data-time="8:22">Flexbox Video</li>
@@ -24,5 +26,34 @@ const str = `<ul>
 // Desarrollar una funcion que me devuelva el total de segundos de los videos de tipo Redux
 // Transformar la cadena en objetos que pueda trabajar con los metodos vistos hasta ahora.
 
+let html = parseHTML();
+list = convertObjects(html)
 
+getDuration(list, 'Redux Video')
 
+function getDuration(list, videoType) {
+  return list.reduce((x,y) => y.type === videoType ? x + y.duration : x, 0)
+}
+
+function convertObjects(html) {
+  let list = [];
+
+  list = html.getElementsByTagName('li').map(e => ({
+    type: e.textContent,
+    duration: convertSeconds(e.getAttribute('data-time'))
+  }));
+
+  return list;
+}
+
+function parseHTML() {
+  let parser = new DomParser();
+  let dom = parser.parseFromString(str, "text/html");
+
+  return dom;
+}
+
+function convertSeconds(timeString) {
+  let splitted = timeString.split(":");
+  return parseInt(splitted[0], 10) * 60 + parseInt(splitted[1], 10);
+}
