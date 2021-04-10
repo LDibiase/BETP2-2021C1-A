@@ -19,3 +19,48 @@ const beers = [
     { name: 'Belgian Wit', abv: 5.4, label: 'https://s3.amazonaws.com/brewerydbapi/beer/3CvVQG/upload_xOMnlK-large.png', type: 'Wheat' },
     { name: 'Stolen Fruit', abv: 4.6, label: 'https://s3.amazonaws.com/brewerydbapi/beer/YGT30k/upload_uVCHP7-large.png', type: 'Wheat' },
   ];
+
+// Punto 1
+const prices = calculatePrice()
+
+// Punto 2
+const beersWithFileName = insertLabel()
+
+// Punto 3
+const orderedBeersByType = sortByType()
+
+
+function sortByType() {
+  let aux = [...beers]
+  return aux.sort((a, b) => (a.type > b.type) ? 1 : -1)
+}
+
+function insertLabel() {
+  return beers.map(function(beer) {
+    let label = getLabel(beer.label)
+    return {...beer, file_name: label}
+  })
+}
+
+function getLabel(label) {
+  let result = label.split('/')
+  return result[result.length - 1]
+}
+
+function calculatePrice() {
+  return beers.map(function(beer){
+      return getPrice(beer.name, beer.abv)
+  })
+}
+
+function getPrice(name, amount) {
+  if (name === "Purple Iris") {
+    return 320
+  }
+
+  if (amount < 5) {
+    return 300
+  } else {
+    return 350
+  }
+}
